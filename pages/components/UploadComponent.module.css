@@ -1,0 +1,23 @@
+/* UploadComponent.module.css */
+.dropzone {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.active {
+    background-color: rgba(0, 255, 0, 0.3);
+    border: 2px dashed green;
+}
+
+.inactive {
+    background-color: transparent;
+    border: none;
+}

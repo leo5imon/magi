@@ -2,12 +2,13 @@ import React from "react";
 import Image from 'next/image'
 import { InstantSearch, Hits, SearchBox } from "react-instantsearch";
 import TypesenseInstantSearchAdapter from "typesense-instantsearch-adapter";
+import styles from './SearchBar.module.css';
 
-function Hit({ hit }) {
-    return (
-        <Image src={hit.images_url} alt={hit.id} width={200} height={200}/>
-    );
-  }
+const Hit = ({ hit }) => (
+    <div className={styles.hitImage}>
+        <Image src={hit.images_url} alt={hit.id} width={200} height={200} />
+    </div>
+);
 
 const SearchBar = () => {
     const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
@@ -33,8 +34,12 @@ const SearchBar = () => {
     
     return (
         <InstantSearch indexName="images" searchClient={searchClient} future={{ preserveSharedStateOnUnmount: true }}>
-            <SearchBox />
-            <Hits hitComponent={Hit} />
+            <div className={styles.searchBox}>
+                <SearchBox submit={<div />} reset={<div />} translations={{placeholder: 'Search for images...'}} />
+            </div>
+            <div className={styles.hitsContainer}>
+                <Hits hitComponent={Hit} />
+            </div>
         </InstantSearch>
     );
 }

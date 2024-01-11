@@ -1,18 +1,19 @@
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { IncomingForm } from 'formidable';
 import { promises as fs } from 'fs';
+import { toast } from "sonner";
 import Typesense from 'typesense';
 import Replicate from "replicate";
 
 export const config = {
     api: {
-        bodyParser: false, // Disables the default body parser to use formidable
+        bodyParser: false,
     },
 };
 
 export default async function handler(req, res) {
     if (req.method === 'POST') {
-        // Parse the multipart/form-data
+
         const data = await new Promise((resolve, reject) => {
             const form = new IncomingForm();
             form.parse(req, (err, fields, files) => {
@@ -25,7 +26,6 @@ export default async function handler(req, res) {
           return res.status(400).send('No files uploaded.');
         }
 
-        // Set up AWS S3 client
         const s3 = new S3Client({
           credentials: {
               secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -82,15 +82,17 @@ export default async function handler(req, res) {
             };
         
             const documentRef = await typesense.collections('images').documents().create(newImage);
+            toast("Image added.");
             console.log("Image added with ID: ", documentRef.id);
 
           } catch (error) {
-            console.error(error);
+            toast("Oops, something went wrong.");
             res.status(500).json({ error: 'Error uploading a file' });
             return;
         }
     }
     } else {
         res.status(405).json({ error: 'Method not allowed' });
+        toast("Oops, something went wrong.");
     }
 }
