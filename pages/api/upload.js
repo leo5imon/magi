@@ -73,9 +73,9 @@ export default async function handler(req, res) {
             input: {
               image: Location,
               prompt:
-                "Label this image. It can describe the color of the image, the content of the image, the type of the image, the mood of it and text written on it.",
+                "I'm creating an image search engine. Give me specific tags for the color, content, type, mood & text. I want to have 1, 2 or 3 tags for the first 4, and then all the text you can get for the last one.",
               top_p: 1,
-              max_tokens: 512,
+              max_tokens: 200,
               temperature: 0.01,
             },
           }

@@ -1,23 +1,22 @@
-/* UploadComponent.module.css */
+/* When dragging files over the page */
+.dragActive {
+  background-color: #7bc6ff38; /* Or any color you want to show during drag over */
+  z-index: 9999; /* High z-index to ensure it's on top */
+}
+
+.dropzone .dragActive {
+  cursor: grab;
+}
+
 .dropzone {
-  position: fixed;
+  position: fixed; /* Fixed position to cover the entire viewport */
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 9999;
+  width: 100vw; /* Full viewport width */
+  height: 100vh; /* Full viewport height */
   display: flex;
-  justify-content: center;
   align-items: center;
-  flex-direction: column;
-}
-
-.active {
-  background-color: rgba(0, 255, 0, 0.3);
-  border: 2px dashed green;
-}
-
-.inactive {
-  background-color: transparent;
-  border: none;
+  justify-content: center;
 }

@@ -2,25 +2,12 @@ import React, { useState } from "react";
 import Image from "next/image";
 import {
   InstantSearch,
-  Hits,
   SearchBox,
   Configure,
   useHits,
 } from "react-instantsearch";
 import TypesenseInstantSearchAdapter from "typesense-instantsearch-adapter";
 import styles from "./SearchBar.module.css";
-
-const searchBoxClassNames = {
-  root: styles.searchBoxRoot,
-  form: styles.searchBoxForm,
-  input: styles.searchBoxInput,
-  submit: styles.searchBoxSubmit,
-  reset: styles.searchBoxReset,
-  loadingIndicator: styles.searchBoxLoadingIndicator, // The loading indicator element
-  submitIcon: styles.searchBoxSubmitIcon, // The submit icon
-  resetIcon: styles.searchBoxResetIcon, // The reset icon
-  loadingIcon: styles.searchBoxLoadingIcon, // The loading icon
-};
 
 function CustomHits(props) {
   const { hits } = useHits(props);
@@ -30,7 +17,6 @@ function CustomHits(props) {
     setSelectedImage(imageUrl);
   };
 
-  // Close the full-width view when the background is clicked
   const handleClose = () => {
     setSelectedImage(null);
   };
@@ -84,6 +70,27 @@ function CustomHits(props) {
 }
 
 const SearchBar = () => {
+  const [inputActive, setInputActive] = useState(false);
+
+  const searchBoxClassNames = {
+    root: styles.searchBoxRoot,
+    form: styles.searchBoxForm,
+    input: inputActive
+      ? `${styles.searchBoxInput} ${styles.active}`
+      : styles.searchBoxInput,
+    submit: styles.searchBoxSubmit,
+    reset: styles.searchBoxReset,
+    loadingIndicator: styles.searchBoxLoadingIndicator,
+    submitIcon: styles.searchBoxSubmitIcon,
+    resetIcon: styles.searchBoxResetIcon,
+    loadingIcon: styles.searchBoxLoadingIcon,
+  };
+  
+   // Event handler for when the input is focused
+   const handleFocus = () => setInputActive(true);
+   // Event handler for when the input loses focus
+   const handleBlur = (e) => setInputActive(e.target.value.length > 0);
+
   const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
     server: {
       apiKey: process.env.NEXT_PUBLIC_TYPESENSE_API_SEARCH_ONLY,
@@ -102,7 +109,7 @@ const SearchBar = () => {
     },
   });
   const searchClient = typesenseInstantsearchAdapter.searchClient;
-
+  
   return (
     <InstantSearch
       indexName="images"
@@ -114,7 +121,10 @@ const SearchBar = () => {
         classNames={searchBoxClassNames}
         autoFocus
         placeholder="Search for images..."
+        onFocus={handleFocus}
+        onBlur={handleBlur}
       />
+      
       <CustomHits />
     </InstantSearch>
   );

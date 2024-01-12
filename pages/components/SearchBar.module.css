@@ -3,32 +3,51 @@
 .searchBoxRoot {
   display: flex;
   justify-content: center;
-  margin: 20px 0;
+  margin: 40px 0; /* Increase margin for more vertical space */
 }
 
 .searchBoxForm {
-  width: 100%;
+  width: 80%; /* Make the search bar a bit smaller */
+  max-width: 600px; /* Limit the size on larger screens */
+  margin: auto; /* Center the form in the available space */
   position: relative;
 }
 
 .searchBoxInput {
-  font-size: 18px; /* Big font size for better visibility */
-  padding: 10px 20px; /* Add some padding for aesthetics */
-  width: 100%; /* Full width of the form */
-  border: 1px solid #dfe1e5; /* Google-like border */
-  border-radius: 24px; /* Rounded corners */
-  outline: none; /* Remove the outline */
+  font-size: 20px; /* Slightly larger font size */
+  padding: 12px 24px; /* Slightly more padding */
+  width: 100%;
+  border: 2px solid #dfe1e5;
+  border-radius: 30px; /* More rounded corners */
+  outline: none;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+  transition: box-shadow 0.3s ease; /* Smooth transition for shadow */
+}
+
+.searchBoxInput::placeholder {
+  color: #9AA0A6; /* Styled placeholder text */
+  font-style: italic;
+  text-align: start; /* Center the placeholder text */
+}
+
+.searchBoxInput.active::placeholder {
+  text-align: start; /* Align placeholder text to the start */
+}
+
+.searchBoxInput:focus {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* More pronounced shadow on focus */
+}
+
+.searchBoxLoadingIndicator {
+  position: absolute;
+  top: 50%;
+  right: 15px; /* Place it on the right inside the form, 10px from the edge */
+  transform: translateY(-50%); /* Vertically center it */
+  /* Other styles for your loading indicator */
 }
 
 .searchBoxSubmit {
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  outline: none;
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
+  display: none;
 }
 
 .searchBoxReset {
@@ -41,35 +60,49 @@
 
 .hitsContainer {
   display: grid;
-  grid-template-columns: repeat(7, 1fr); /* Creates 7 columns */
-  gap: 10px; /* Spacing between items */
-  padding: 10px; /* Padding around the grid */
-}
-
-.hitItem {
-  cursor: pointer; /* Indicates the item is clickable */
-  transition: transform 0.3s ease; /* For a smooth hover effect */
-}
-
-.hitItem:hover {
-  transform: scale(1.05); /* Slightly enlarges the item on hover */
+  grid-template-columns: repeat(7, 1fr);
+  gap: 15px;
+  padding-right: 50px;
+  padding-left: 50px;
+  margin: 0 auto; /* Center the grid in the page */
 }
 
 .hitImage {
-  width: 100%; /* Ensures the image fills the container */
-  height: auto; /* Keeps the image aspect ratio */
-  border-radius: 8px; /* Optional: rounds the corners of the image */
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Ensure no overflow from the scale transformation */
+  position: relative; /* For absolute positioning of overlay content */
 }
 
-/* Responsive layout for smaller screens */
+.hitImage:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2); /* Shadow for depth */
+}
+
+.hitImage:hover::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(255,255,255,0.2); /* White overlay */
+}
+
+
 @media (max-width: 1024px) {
   .hitsContainer {
-    grid-template-columns: repeat(4, 1fr); /* 4 columns on smaller screens */
+    grid-template-columns: repeat(4, 1fr); /* Adjusted for tablet screens */
+    gap: 15px; /* Larger gap */
   }
 }
 
 @media (max-width: 768px) {
   .hitsContainer {
-    grid-template-columns: repeat(3, 1fr); /* 3 columns on mobile screens */
+    grid-template-columns: repeat(2, 1fr); /* Only 2 columns on mobile for larger images */
+    gap: 20px; /* Even larger gap for clarity */
   }
 }
