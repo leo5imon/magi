@@ -1,75 +1,65 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect, useCallback } from "react";
+import axios from "axios";
 import { toast } from "sonner";
-import { useDropzone } from 'react-dropzone';
-import styles from './UploadComponent.module.css';
+import { useDropzone } from "react-dropzone";
+import styles from "./UploadComponent.module.css";
 
 const UploadComponent = () => {
-    const [isFileDragged, setIsFileDragged] = useState(false);
+  const [isFileDragged, setIsFileDragged] = useState(false);
 
-    const handleUpload = async (files) => {
-        const formData = new FormData();
-        files.forEach(file => {
-            formData.append('files', file);
-        });
-
-        try {
-            const response = await axios.post('api/upload', formData);
-            toast("Image is being uploaded.");
-        } catch (error) {
-            toast("Oops, something went wrong.");
-        }
-    };
-
-    const dropzoneCallback = useCallback(acceptedFiles => {
-        handleUpload(acceptedFiles);
-    }, []);
-
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({
-        onDrop: dropzoneCallback,
-        multiple: true,
-        noClick: true,  // Disable click to open file dialog
-        noKeyboard: true // Disable keyboard interaction
+  const handleUpload = async (files) => {
+    const formData = new FormData();
+    files.forEach((file) => {
+      formData.append("files", file);
     });
 
-    useEffect(() => {
-      const handleDragOver = (e) => {
-          e.preventDefault();
-          setIsFileDragged(true);
-      };
+    try {
+      const response = await axios.post("/api/upload", formData);
+      toast("Image is being uploaded.");
+    } catch (error) {
+      toast("Oops, something went wrong.");
+    }
+  };
 
-      const handleDragLeave = (e) => {
-          e.preventDefault();
-          setIsFileDragged(false);
-      };
-
-      window.addEventListener('dragover', handleDragOver);
-      window.addEventListener('dragleave', handleDragLeave);
-      window.addEventListener('drop', handleDragLeave);
-
-      return () => {
-          window.removeEventListener('dragover', handleDragOver);
-          window.removeEventListener('dragleave', handleDragLeave);
-          window.removeEventListener('drop', handleDragLeave);
-      };
-
-      const handleDragEnter = (e) => {
-            e.preventDefault();
-            setIsFileDragged(true);
-        };
+  const dropzoneCallback = useCallback((acceptedFiles) => {
+    handleUpload(acceptedFiles);
   }, []);
 
-    return (
-      <>
-          {isFileDragged && (
-              <div {...getRootProps()} className={styles.dropzone}>
-                  <input {...getInputProps()} />
-                  <p>Drop the files here...</p>
-              </div>
-          )}
-          {/* Rest of your page content */}
-      </>
-  );  
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop: dropzoneCallback,
+    multiple: true,
+    noClick: true,
+    noKeyboard: true,
+  });
+
+  useEffect(() => {
+    const handleDrag = (e) => {
+      e.preventDefault();
+      setIsFileDragged(e.type === "dragover");
+    };
+
+    window.addEventListener("dragover", handleDrag);
+    window.addEventListener("dragleave", handleDrag);
+    window.addEventListener("drop", handleDrag);
+
+    return () => {
+      window.removeEventListener("dragover", handleDrag);
+      window.removeEventListener("dragleave", handleDrag);
+      window.removeEventListener("drop", handleDrag);
+    };
+  }, []);
+
+  return (
+    <>
+      {isFileDragged && (
+        <div {...getRootProps()} className={styles.dropzone}>
+          <input {...getInputProps()} />
+          <p>Drop the files here...</p>
+        </div>
+      )}
+      {/* Rest of your page content */}
+    </>
+  );
 };
 
 export default UploadComponent;
