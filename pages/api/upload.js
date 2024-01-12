@@ -40,23 +40,23 @@ export default async function handler(req, res) {
     const typesense = new Typesense.Client({
       nodes: [
         {
-          host: "syon750ckh8ezfrjp-1.a1.typesense.net", // For Typesense Cloud use xxx.a1.typesense.net
-          port: 443, // For Typesense Cloud use 443
-          protocol: "https", // For Typesense Cloud use https
+          host: "syon750ckh8ezfrjp-1.a1.typesense.net",
+          port: 443,
+          protocol: "https",
         },
       ],
       apiKey: process.env.TYPESENSE_API_KEY,
-      connectionTimeoutSeconds: 2,
+      connectionTimeoutSeconds: 10,
     });
-    // Upload the file to S3
+
     for (const file of data.files.files) {
       const fileContent = await fs.readFile(file.filepath);
 
       const now = new Date();
-      const dateTime = now.toISOString().replace(/[^0-9]/g, ""); // Replaces non-numeric characters
+      const dateTime = now.toISOString().replace(/[^0-9]/g, "");
       const params = {
-        Bucket: "image-tag", // Replace with your bucket name
-        Key: `${dateTime}-${file.originalFilename}`, // File name you want to save as
+        Bucket: "image-tag",
+        Key: `${dateTime}-${file.originalFilename}`,
         Body: fileContent,
       };
 
@@ -64,9 +64,7 @@ export default async function handler(req, res) {
         const putObjectCommand = new PutObjectCommand(params);
         const response = await s3.send(putObjectCommand);
         const Location = `https://${params.Bucket}.s3.${process.env.AWS_REGION}.amazonaws.com/${params.Key}`;
-        res
-          .status(200)
-          .json({ message: "File uploaded successfully!", url: Location });
+
         const tags = await replicate.run(
           "yorickvp/llava-13b:e272157381e2a3bf12df3a8edd1f38d1dbd736bbb7437277c8b34175f8fce358",
           {
@@ -90,16 +88,18 @@ export default async function handler(req, res) {
           .collections("images")
           .documents()
           .create(newImage);
-        toast("Image added.");
-        console.log("Image added with ID: ", documentRef.id);
+
+        res.status(200).json({
+          message: "File uploaded successfully!",
+          url: Location,
+          shouldRefresh: true,
+        });
       } catch (error) {
-        toast("Oops, something went wrong.");
-        res.status(500).json({ error: "Error uploading a file" });
+        res.status(500).json({ error: "Error uploading file" });
         return;
       }
     }
   } else {
     res.status(405).json({ error: "Method not allowed" });
-    toast("Oops, something went wrong.");
   }
 }

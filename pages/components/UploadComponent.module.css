@@ -1,7 +1,6 @@
-/* When dragging files over the page */
 .dragActive {
-  background-color: #7bc6ff38; /* Or any color you want to show during drag over */
-  z-index: 9999; /* High z-index to ensure it's on top */
+  background-color: #7bc6ff38;
+  z-index: 9999;
 }
 
 .dropzone .dragActive {
@@ -9,13 +8,13 @@
 }
 
 .dropzone {
-  position: fixed; /* Fixed position to cover the entire viewport */
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  width: 100vw; /* Full viewport width */
-  height: 100vh; /* Full viewport height */
+  width: 100vw;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;

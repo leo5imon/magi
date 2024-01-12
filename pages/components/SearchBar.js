@@ -85,11 +85,9 @@ const SearchBar = () => {
     resetIcon: styles.searchBoxResetIcon,
     loadingIcon: styles.searchBoxLoadingIcon,
   };
-  
-   // Event handler for when the input is focused
-   const handleFocus = () => setInputActive(true);
-   // Event handler for when the input loses focus
-   const handleBlur = (e) => setInputActive(e.target.value.length > 0);
+
+  const handleFocus = () => setInputActive(true);
+  const handleBlur = (e) => setInputActive(e.target.value.length > 0);
 
   const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
     server: {
@@ -109,7 +107,7 @@ const SearchBar = () => {
     },
   });
   const searchClient = typesenseInstantsearchAdapter.searchClient;
-  
+
   return (
     <InstantSearch
       indexName="images"
@@ -124,7 +122,7 @@ const SearchBar = () => {
         onFocus={handleFocus}
         onBlur={handleBlur}
       />
-      
+
       <CustomHits />
     </InstantSearch>
   );
