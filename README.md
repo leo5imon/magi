@@ -1,21 +1,57 @@
-Next.js app for uploading images, generating tag with Llava model & indexing it with a search engine.
+# Magi
 
-Add your Typesense, Replicate & AWS API Key to .env and you can run it on local.
-Built with llava-13b, you can poke around & try other prompt.
+### Meme search engine for the real shitposters.
 
-## Getting Started
+## Features
+- Dropzone upload.
+- File storage on S3.
+- Automatic tagging based on a prompt & the Llava 13B model from Replicate.
+- Instant search with any keyword.
+- Preview the image in full width by clicking it.
 
-First, run the development server:
+## Preview
+![Main page](https://i.ibb.co/mh7k754/GDq-Ff-F3-WQAAp9q-N.jpg")
+![Query : uwu](https://i.ibb.co/58DvfRk/GDq-Fl9-ZXc-AAm3gd.jpg)
+![Query : cat](https://i.ibb.co/NsgsHcQ/GDq-Fmjz-Wc-AAQj-Pe.jpg)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Tech Stack
+- Next.Js
+- AWS S3
+- Axios
+- Formidable
+- Replicate
+- Typesense
+- Dropzone
+- Tailwind with shadcn/ui
+
+## Installation
+**To use Magi, follow these steps:**
+
+```
+git clone https://github.com/leo5imon/magi.git
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+Then, get your AWS public & private key from https://aws.amazon.com/fr/.
+For the search engine, I'm using TypeSense but feel free to use Algolia or anything : https://cloud.typesense.org/.
+Generate a Replicate API Key from https://replicate.com/.
+
+.env example :
+```
+AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY
+REPLICATE_API_TOKEN
+TYPESENSE_API_KEY
+TYPESENSE_API_SEARCH_ONLY
+TYPESENSE_HOST
+```
+
+## Contribution
+_Contributions are welcome!_
+If you would like to contribute to Magi, please follow these steps:
+
+- Fork the repository.
+- Create a new branch for your feature or bug fix.
+- Make your changes and commit them.
+- Push your changes to your forked repository.
+- Submit a pull request to the main repository.
